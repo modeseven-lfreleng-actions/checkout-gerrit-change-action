@@ -3,6 +3,8 @@
 # SPDX-FileCopyrightText: 2025 The Linux Foundation
 
 ci:
+  # pre-commit.ci sandbox prevents network calls; disable gha-workflow-linter
+  skip: [gha-workflow-linter]
   autofix_commit_msg: |
     Chore: pre-commit autofixes
 
@@ -12,15 +14,7 @@ ci:
 
     Signed-off-by: pre-commit-ci[bot] <pre-commit-ci@users.noreply.github.com>
 
-exclude: |
-  (?x)^(docs/conf.py|
-        \.mypy_cache/|
-        \.pytest_cache/|
-        \.ruff_cache/|
-        dist/|
-        build/|
-        coverage_html_report/|
-        \.venv/)
+exclude: "^docs/conf.py"
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -70,9 +64,6 @@ repos:
     rev: a66e98df7b4aeeb3724184b332785976d062b92e  # frozen: v1.19.1
     hooks:
       - id: mypy
-        additional_dependencies:
-          - types-PyYAML
-          - types-requests
 
   - repo: https://github.com/btford/write-good
     rev: ab66ce10136dfad5146e69e70f82a3efac8842c1 # frozen: v1.0.8
@@ -108,6 +99,12 @@ repos:
     rev: 63c8f8312b7559622c0d82815639671ae42132ac # frozen: v2.4.1
     hooks:
       - id: codespell
+
+  - repo: https://github.com/lfreleng-actions/gha-workflow-linter
+    rev: 100fffb1dffb802767871aae69687b165e4bf782  # frozen: v0.1.13
+    hooks:
+      - id: gha-workflow-linter
+        args: [lint, .github/workflows/, --verbose]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: b035497fb64e3f9faa91e833331688cc185891e6  # frozen: 0.36.0
